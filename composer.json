@@ -1,0 +1,23 @@
+{
+    "name": "laravel-commode/bladed",
+    "description": "A simple tool to extend laravel's blade functionality.",
+    "authors": [
+        {
+            "name": "dubpub",
+            "email": "dubpubz@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*",
+        "illuminate/view": "4.2.*",
+        "laravel-commode/common": "dev-master",
+        "electrolinux/phpquery": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "LaravelCommode\\Bladed": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
