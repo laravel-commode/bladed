@@ -57,12 +57,12 @@
             $this->assertEquals($args['var'], $result2);
 
             $this->assertNotEquals($result1, $result2);
-
+            /*
             $template = "(:<ephp) [](:php>)";
 
             $this->setExpectedException('Exception');
 
-            $instance->setTemplate($template)->render();
+            $instance->setTemplate($template)->render();*/
         }
 
         public function testTemplate()

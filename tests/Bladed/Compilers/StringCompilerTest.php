@@ -16,7 +16,8 @@
         {
             $instance = $this->getInstance();
             $this->assertEquals('Hello, me!', $instance->compileWiths("Hello, {{\$name}}!", ['name' => 'me']));
+            /**
             $this->setExpectedException('Exception');
-            dd($instance->compileWiths("Hello, {{\$name}} {{[]}}!", ['name' => 'me']));
+            $instance->compileWiths("Hello, {{\$name}} {{[]}}!", ['name' => 'me']);*/
         }
     }
