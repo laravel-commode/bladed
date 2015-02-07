@@ -114,7 +114,7 @@
          */
         protected function getCommandMock($app, $construct = true, \Closure $withMock = null)
         {
-            $mock = $this->getMockForAbstractClass(ABladedCommand::class, [$app], '', $construct);
+            $mock = $this->getMockForAbstractClass('LaravelCommode\Bladed\Commands\ABladedCommand', [$app], '', $construct);
 
 
             if ($withMock !== null) {

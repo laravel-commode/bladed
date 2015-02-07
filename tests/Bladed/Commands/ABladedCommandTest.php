@@ -98,7 +98,7 @@
             $mock->extend('methods', $extendedClosures, 1);
             $this->assertEquals($returnValue, $mock->methods());
 
-            $this->setExpectedException(\BadMethodCallException::class);
+            $this->setExpectedException('BadMethodCallException');
 
             $mock->callFake();
 

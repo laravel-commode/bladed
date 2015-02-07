@@ -28,9 +28,9 @@
             {
 
                 $this->with(['commode.bladed'], function(IBladedManager $manager) {
-                    $manager->registerCommandNamespace('scope', DefaultCommands\Scope::class);
-                    $manager->registerCommandNamespace('form', DefaultCommands\Form::class);
-                    $manager->registerCommandNamespace('template', DefaultCommands\Template::class);
+                    $manager->registerCommandNamespace('scope', 'LaravelCommode\Bladed\DefaultCommands\Scope');
+                    $manager->registerCommandNamespace('form', 'LaravelCommode\Bladed\DefaultCommands\Form');
+                    $manager->registerCommandNamespace('template', 'LaravelCommode\Bladed\DefaultCommands\Template');
                 });
             }
 

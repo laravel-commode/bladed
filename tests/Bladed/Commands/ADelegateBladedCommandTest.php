@@ -48,7 +48,7 @@
 
             $this->assertEquals($this->testing(), $instance->testing());
 
-            $this->setExpectedException(\BadMethodCallException::class);
+            $this->setExpectedException('BadMethodCallException');
 
             $instance->__call('testings');
         }

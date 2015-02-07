@@ -230,10 +230,10 @@
 
             $instance = $this->getInstance($app, $blade);
 
-            $instance->registerNamespace('someNS', TestClass::class);
+            $instance->registerNamespace('someNS', 'LaravelCommode\Bladed\Compilers\TestClass');
             $instance->registerNamespaces(
-                ['someNS1' => TestClass::class,
-                'someNS2' => TestClass::class]
+                ['someNS1' => 'LaravelCommode\Bladed\Compilers\TestClass',
+                'someNS2' => 'LaravelCommode\Bladed\Compilers\TestClass']
             );
 
             $this->assertNull($instance->getNamespace('someNS'));

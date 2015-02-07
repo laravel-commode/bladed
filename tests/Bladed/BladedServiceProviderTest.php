@@ -63,7 +63,7 @@
                 switch($ns)
                 {
                     case 'commode.bladed':
-                    case IBladedManager::class:
+                    case 'LaravelCommode\Bladed\Interfaces\IBladedManager':
                         $this->assertTrue($closure($app) instanceof BladedManager);
                         break;
                 }
