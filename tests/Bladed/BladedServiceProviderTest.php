@@ -74,8 +74,8 @@
             $methodRegistering = $reflection->getMethod('registering');
             $methodLaunching = $reflection->getMethod('launching');
 
-            $methodRegistering->setAccessible(1);
-            $methodLaunching->setAccessible(1);
+            $methodRegistering->setAccessible(true);
+            $methodLaunching->setAccessible(true);
 
             $methodRegistering->invoke($instance);
             $methodLaunching->invoke($instance);
