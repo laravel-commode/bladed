@@ -14,6 +14,9 @@
         "laravel-commode/common": "dev-master",
         "electrolinux/phpquery": "dev-master"
     },
+    "require-dev": {
+        "satooshi/php-coveralls": "dev-master"
+    },
     "autoload": {
         "psr-0": {
             "LaravelCommode\\Bladed": "src/"
