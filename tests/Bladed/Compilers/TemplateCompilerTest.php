@@ -38,7 +38,7 @@
         {
             $instance = $this->getInstance($view = $this->getViewMock());
 
-            $view->expects($this->exactly(3))->method('getShared')->will($this->returnValue([]));
+            $view->expects($this->exactly(2))->method('getShared')->will($this->returnValue([]));
 
             $args = ['var' => uniqid()];
 
