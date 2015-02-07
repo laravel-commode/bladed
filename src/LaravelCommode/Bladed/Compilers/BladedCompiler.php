@@ -27,28 +27,28 @@
          * @namespace.method(?$args) @>
          * @namespace.property @>
          */
-        const State = '/(@)([a-zA-Z]{1,})(\.)([a-zA-Z]{1,})(.*?)(\ {0,})(\@\>)/is';
+        const STATE = '/(@)([a-zA-Z]{1,})(\.)([a-zA-Z]{1,})(.*?)(\ {0,})(\@\>)/is';
 
         /**
          * call syntax
          * @::@namespace.method(?$args) @>
          * @::@namespace.property @>
          */
-        const CacheState = '/(@\:\:)([a-zA-Z]{1,})(\.)([a-zA-Z]{1,})(.*?)(\ {0,})(\@\>)/is';
+        const CACHE_STATE = '/(@\:\:)([a-zA-Z]{1,})(\.)([a-zA-Z]{1,})(.*?)(\ {0,})(\@\>)/is';
 
         /**
          * if syntax
          * @?namespace.method(?$args) ?@>
          * @?namespace.property ?@>
          */
-        const Quest = '/(\@\?)([a-zA-Z]{1,})(\.)([a-zA-Z]{1,})(.*?)(\ {0,})(\?\@\>)/is';
+        const QUEST = '/(\@\?)([a-zA-Z]{1,})(\.)([a-zA-Z]{1,})(.*?)(\ {0,})(\?\@\>)/is';
 
         /**
          * unless syntax
          * @!?namespace.method(?$args) ?@>
          * @!?namespace.property ?@>
          */
-        const QuestFalse = '/(\@\!\?)([a-zA-Z]{1,})(\.)([a-zA-Z]{1,})(.*?)(\ {0,})(\?\@\>)/is';
+        const QUEST_FALSE = '/(\@\!\?)([a-zA-Z]{1,})(\.)([a-zA-Z]{1,})(.*?)(\ {0,})(\?\@\>)/is';
 
         /**
          * template syntax
@@ -56,7 +56,7 @@
          *     multistring template blade text
          * }|(T_STRING, ?$args[])@>
          */
-        const Template = '/(\@\|)([a-z]{1,})(\.)([a-z]{1,})(\ {0,})(\{)(.*?)(\ {0,})(\})(\ {0,})(\|)(\()(.*?)(\))(\@)(\>)/is';
+        const TEMPLATE = '/(\@\|)([a-z]{1,})(\.)([a-z]{1,})(\ {0,})(\{)(.*?)(\ {0,})(\})(\ {0,})(\|)(\()(.*?)(\))(\@)(\>)/is';
 
         /**
          * template syntax
@@ -64,17 +64,17 @@
          *     multistring template blade text
          * }|(T_STRING, ?$args[])@>
          */
-        const CacheTemplate = '/(\@\:\:\|)([a-z]{1,})(\.)([a-z]{1,})(\ {0,})(\{)(.*?)(\ {0,})(\})(\ {0,})(\|)(\()(.*?)(\))(\@)(\>)/is';
+        const CACHE_TEMPLATE = '/(\@\:\:\|)([a-z]{1,})(\.)([a-z]{1,})(\ {0,})(\{)(.*?)(\ {0,})(\})(\ {0,})(\|)(\()(.*?)(\))(\@)(\>)/is';
 
         /**
          * foreach syntax
          * @in($collection||$value)
          * @in($collection||$key||$value)
          */
-        const Each = '/(\@(in|up|down)\()([\$\[\]\:\.\w\d\(\)\_\>\'\"\,\ \-]{1,})(\|{2})(\$[\w]{1,})(((\|{2})(\$[\w]{1,})){0,1})(\))/';
-        const EndEach = '/(\@(in|up|down)\>)/';
-        const ElseSyntax = '/(\@\?\-\>)/';
-        const EndifSyntax = '/(\@\?\>)/';
+        const EACH = '/(\@(in|up|down)\()([\$\[\]\:\.\w\d\(\)\_\>\'\"\,\ \-]{1,})(\|{2})(\$[\w]{1,})(((\|{2})(\$[\w]{1,})){0,1})(\))/';
+        const END_EACH = '/(\@(in|up|down)\>)/';
+        const ELSE_SYNTAX = '/(\@\?\-\>)/';
+        const END_IF_SYNTAX = '/(\@\?\>)/';
         /**
          * @var string
          */
@@ -286,16 +286,16 @@
         protected function register()
         {
             $rules = [
-                self::State         =>  $this->getStateParser(),
-                self::Quest         =>  $this->getQuestParser(),
-                self::QuestFalse    =>  $this->getQuestFalseParser(),
-                self::Each          =>  $this->getEachParser(),
-                self::ElseSyntax    =>  function() { return '<?php else: ?>'; },
-                self::EndifSyntax   =>  function() { return '<?php endif; ?>'; },
-                self::EndEach       =>  $this->getEndCycleParser(),
-                self::Template      =>  $this->getTplParser(),
-                self::CacheTemplate      =>  $this->getCacheTplParser(),
-                self::CacheState         =>  $this->getCacheStateParser()
+                self::STATE         =>  $this->getStateParser(),
+                self::QUEST         =>  $this->getQuestParser(),
+                self::QUEST_FALSE    =>  $this->getQuestFalseParser(),
+                self::EACH          =>  $this->getEachParser(),
+                self::ELSE_SYNTAX    =>  function() { return '<?php else: ?>'; },
+                self::END_IF_SYNTAX   =>  function() { return '<?php endif; ?>'; },
+                self::END_EACH       =>  $this->getEndCycleParser(),
+                self::TEMPLATE      =>  $this->getTplParser(),
+                self::CACHE_TEMPLATE      =>  $this->getCacheTplParser(),
+                self::CACHE_STATE         =>  $this->getCacheStateParser()
             ];
 
             $this->blade->extend(function($view) use ($rules)
