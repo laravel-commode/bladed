@@ -15,18 +15,18 @@
 ##<a name="service">Installing</a>
 
 You can install laravel-commode/validation-locator using composer:
-
-"require": {
-    "laravel-commode/bladed": "dev-master"
-}
+    
+    "require": {
+        "laravel-commode/bladed": "dev-master"
+    }
 To enable package you need to register LaravelCommode\Bladed\BladedServiceProvider service provider in your application config.
 
-<?php
-    // ./yourLaravelApplication/app/config/app.php
-    return [
-        // ... config code
-        'providers' => [
-            // ... providers
-            'LaravelCommode\Bladed\BladedServiceProvider'
-        ]
-    ];
+    <?php
+        // ./yourLaravelApplication/app/config/app.php
+        return [
+            // ... config code
+            'providers' => [
+                // ... providers
+                'LaravelCommode\Bladed\BladedServiceProvider'
+            ]
+        ];
