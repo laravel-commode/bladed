@@ -84,6 +84,12 @@
          */
         private $iocRegistry;
 
+        /** @noinspection MoreThanThreeArgumentsInspection
+         * @param BladeCompiler $blade
+         * @param Application $application
+         * @param string $registryFunction
+         * @param string $iocRegistry
+         */
         public function __construct(BladeCompiler $blade, Application $application, $registryFunction = 'bladedCommand', $iocRegistry = 'bladed')
         {
             $this->blade = $blade;
@@ -130,7 +136,7 @@
                 throw new Exception("Unknown blade command namespace - {$name}");
             }
 
-            return $this->application["{$this->iocRegistry}.{$name}"];
+            return $this->application->make("{$this->iocRegistry}.{$name}");
         }
 
         protected function getStateParser()
@@ -146,9 +152,17 @@
 
         protected function getCacheStateParser()
         {
-            return function($matches)
+            $evalScope = function ($eval, $scope) {
+                extract($scope);
+                return eval($eval);
+            };
+
+            $evalScope = $evalScope->bindTo(null);
+
+            return function($matches) use ($evalScope)
             {
-                $result = eval($str = "return {$this->registryFunction}('{$matches[2]}', app('view'))->{$matches[4]}{$matches[5]};");
+                $eval = "return {$this->registryFunction}('{$matches[2]}', \$app->make('view'))->{$matches[4]}{$matches[5]};";
+                $result = $evalScope($eval, ['app' => $this->application]);
                 return $result;
             };
         }
@@ -197,13 +211,20 @@
 
         protected function getCacheTplParser()
         {
-            return function($matches) {
+            $evalScope = function ($eval, $scope) {
+                extract($scope);
+                return eval($eval);
+            };
+
+            $evalScope = $evalScope->bindTo(null);
+
+            return function($matches) use ($evalScope) {
                 $bag = $matches[2];
                 $method = $matches[4];
                 $template = $matches[7];
                 $params = $matches[13];
 
-                $result = "return {$this->registryFunction}('{$bag}', app('view'))->{$method}";
+                $result = "return {$this->registryFunction}('{$bag}', \$app->make('view'))->{$method}";
 
 
                 $template = str_replace('$', '(:var)', $template);
@@ -211,9 +232,9 @@
                 $template = str_replace('<?=', '(:<ephp)', $template);
                 $template = str_replace('?>', '(:php>)', $template);
 
-                $result .= '((new \LaravelCommode\Bladed\Compilers\TemplateCompiler(\Bladed::getStringCompiler(), app("view")))->setTemplate("'.addslashes($template).'")'.($params == '' ? '': ', '.$params).') ?>';
+                $result .= '((new \LaravelCommode\Bladed\Compilers\TemplateCompiler($app->make("commode.bladed")->getStringCompiler(), $app->make("view")))->setTemplate("'.addslashes($template).'")'.($params == '' ? '': ', '.$params).') ?>';
 
-                return eval($result);
+                return $evalScope($result, ['app' => $this->application]);
             };
         }
 
@@ -236,7 +257,7 @@
                         break;
                     case 'up':
                         $return .= 'for('.$matches[5].'=0;';
-                        $return .= $matches[5].'<count('.$matches[3].');';
+                        $return .= $matches[5].'<$____length=count('.$matches[3].');';
                         $return .= $matches[5].'++): ?>';
 
                         if ($matches[9] !== '') {
@@ -258,16 +279,7 @@
         protected function getEndCycleParser()
         {
             return function($matches) {
-                switch($matches[2])
-                {
-                    case 'up':
-                    case 'down':
-                        return '<?php endfor; ?>';
-                    case 'in':
-                        return '<?php endforeach; ?>';
-                }
-
-                return '';
+                return $matches[2] === 'up' || $matches[2] === 'down' ? '<?php endfor; ?>' : '<?php endforeach; ?>';
             };
         }
 

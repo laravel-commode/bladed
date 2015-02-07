@@ -39,10 +39,10 @@
             $template = $this->template;
 
             if ($clerify) {
-                $template = str_replace("(:var)", '$', $template);
                 $template = str_replace("(:<php)", '<?php', $template);
                 $template = str_replace("(:<ephp)", '<?=', $template);
                 $template = str_replace("(:php>)", '?>', $template);
+                $template = str_replace("(:var)", '$', $template);
                 $template = stripcslashes($template);
             }
 

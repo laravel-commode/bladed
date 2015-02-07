@@ -26,7 +26,12 @@
              */
             protected function launching()
             {
-                \Bladed::registerCommandNamespace('scope', DefaultCommands\Scope::class);
+
+                $this->with(['commode.bladed'], function(IBladedManager $manager) {
+                    $manager->registerCommandNamespace('scope', DefaultCommands\Scope::class);
+                    $manager->registerCommandNamespace('form', DefaultCommands\Form::class);
+                    $manager->registerCommandNamespace('template', DefaultCommands\Template::class);
+                });
             }
 
             /**
@@ -36,19 +41,12 @@
             {
                 $this->app->singleton('commode.bladed', function ($app) {
                     $compiler = new BladedCompiler($app->make('blade.compiler'), $app, 'Bladed::getCommand', 'commode.bladed');
-                    $stringCompiler = new StringCompiler($app->make('files'), storage_path('views'));
+                    $stringCompiler = new StringCompiler($app->make('files'), call_user_func($app->make('path.storage'), ['views']));
                     return new BladedManager($compiler, $app, $stringCompiler);
                 });
 
                 $this->app->singleton('LaravelCommode\Bladed\BladedManager\Interfaces\IBladedManager', function ($app) {
                     return $app->make('commode.bladed');
-                });
-
-
-                $this->with(['commode.bladed'], function(IBladedManager $manager) {
-                    $manager->registerCommandNamespace('scope', DefaultCommands\Scope::class);
-                    $manager->registerCommandNamespace('form', DefaultCommands\Form::class);
-                    $manager->registerCommandNamespace('template', DefaultCommands\Template::class);
                 });
             }
         }
