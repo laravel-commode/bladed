@@ -44,9 +44,9 @@
                         return new Resolver($app);
                         break;
                     case 'commode.bladed':
-                        return $this->getMock(BladedManager::class, [], [], '', 0);
+                        return $this->getMock('LaravelCommode\Bladed\Manager\BladedManager', [], [], '', 0);
                     case 'blade.compiler':
-                        return $this->getMock(BladeCompiler::class, [], [new Filesystem(), '']);
+                        return $this->getMock('Illuminate\View\Compilers\BladeCompiler', [], [new Filesystem(), '']);
                         break;
                     case 'files':
                         return new Filesystem();
