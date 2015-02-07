@@ -82,21 +82,23 @@
             $mock = $this->getInstance($appMock);
 
 
+
             $returnValue = 5;
-            $extendedClosure = function () use ($returnValue) {
+
+            $extendedClosure = function ()  use ($returnValue) {
                 return $returnValue;
             };
 
-            $extendedClosures = function () {
-                return $this->method();
+            $extendedClosures = function ($returnValue) {
+                return $this->fakeMethod($returnValue);
             };
 
-            $mock->extend('method', $extendedClosure);
-            $this->assertEquals($returnValue, $mock->method());
+            $mock->extend('fakeMethod', $extendedClosure);
 
+            $this->assertEquals($returnValue, $mock->__call('fakeMethod', [$returnValue]));
 
-            $mock->extend('methods', $extendedClosures, 1);
-            $this->assertEquals($returnValue, $mock->methods());
+            $mock->extend('fakeMethods', $extendedClosures, 1);
+            $this->assertEquals($returnValue, $mock->__call('fakeMethods', [$returnValue]));
 
             $this->setExpectedException('BadMethodCallException');
 

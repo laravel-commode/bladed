@@ -170,7 +170,10 @@
                     }
                 }));
 
-                $this->assertEquals(asort(array_values($reflectionScope->getConstants())), asort(array_keys($rules)));
+                $sortA = array_values($reflectionScope->getConstants());
+                $sortB = array_keys($rules);
+
+                $this->assertEquals(asort($sortA), asort($sortB));
 
                 $this->assertEquals("<?php echo bladedCommand('ns', \$__env)->method() ?>", $closure("@ns.method() @>"));
                 $this->assertEquals("<?php if(bladedCommand('ns', \$__env)->method()): ?>", $closure("@?ns.method() ?@>"));

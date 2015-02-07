@@ -17,6 +17,6 @@
             $instance = $this->getInstance();
             $this->assertEquals('Hello, me!', $instance->compileWiths("Hello, {{\$name}}!", ['name' => 'me']));
             $this->setExpectedException('Exception');
-            $instance->compileWiths("Hello, {{\$name + \$undefined}}!", ['name' => 'me']);
+            dd($instance->compileWiths("Hello, {{\$name}} {{[]}}!", ['name' => 'me']));
         }
     }

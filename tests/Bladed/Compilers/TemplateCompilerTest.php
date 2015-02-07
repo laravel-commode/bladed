@@ -58,7 +58,7 @@
 
             $this->assertNotEquals($result1, $result2);
 
-            $template = "(:<ephp) (:var)var + (:var)fake(:php>)";
+            $template = "(:<ephp) [](:php>)";
 
             $this->setExpectedException('Exception');
 
