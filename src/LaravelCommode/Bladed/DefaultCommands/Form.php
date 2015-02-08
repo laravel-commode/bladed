@@ -36,15 +36,22 @@
 
 
         //<editor-fold desc="Working with MetaData">
+        /**
+         * @param $field
+         * @param string $after
+         * @param string $before
+         * @return \phpQuery|\QueryTemplatesParse|\QueryTemplatesSource|\QueryTemplatesSourceQuery|string
+         */
         public function meta($field, $after = null, $before = null)
         {
-            if (!$this->metaManager->currentMetaExists()) {
-                return $this->createElement("label")->html($field);
+            $element = 'label';
+
+            if ($this->metaManager->currentMetaExists()) {
+                $element = $this->metaManager->getCurrentElement();
+                $field = $this->metaManager->getCurrentMetaValue($field);
             }
 
-            return $this->createElement(
-                "{$this->metaManager->getCurrentElement()}"
-            )->html(implode(' ', [$before, $this->metaManager->getCurrentMetaValue($field), $after]));
+            return $this->createElement($element)->html(trim(implode(' ', [$before, $field, $after])));
         }
 
         public function setMeta(MetaData $meta, $metaType = 'label')

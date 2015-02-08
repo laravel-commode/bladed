@@ -11,6 +11,7 @@
         "php": ">=5.4.0",
         "illuminate/support": "4.2.*",
         "illuminate/view": "4.2.*",
+        "illuminate/html": "4.2.*",
         "laravel-commode/common": "dev-master",
         "electrolinux/phpquery": "dev-master"
     },
