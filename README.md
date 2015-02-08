@@ -145,4 +145,30 @@ Simple alternative for native @foreach and @for loops
     @down>                                {{$key}} equals {{$value}} 
                                         @endfor
     
+
+###<a name="template">Template</a>
+
+`Bladed` extension provides **template action** system.
+
+    @|command.templateMethod {
+        This template can be rendered later. {{$renderTime}}
+    }|()@>
     
+    @|command.templateMethod {
+        This template can be rendered later. {{$renderTime}}
+    }|($param1, $paramN)@>
+    
+All method's that will dial templates will always always receive 
+`LaravelCommode\Bladed\Compilers\TemplateCompiler` as first argument and then all the others.
+    
+###<a name="cached_template">Cached template</a>
+
+**Template action** that will be rendered only at once.
+
+    @::|command.method {
+        This template can be rendered later. {{$renderTime}}
+    }|()@>
+
+    @::|command.method {
+        This template can be rendered later. {{$renderTime}}
+    }|($param1, $paramN)@>
