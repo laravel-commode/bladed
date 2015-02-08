@@ -23,6 +23,11 @@
             return $this->getMockForAbstractClass('LaravelCommode\Common\Meta\LocalizedMeta\MetaData', [$lang]);
         }
 
+        protected function getModelObjectMock(array $fields = [])
+        {
+            return (object) $fields;
+        }
+
         public function testConstruct()
         {
             $app = $this->getAppMock();
@@ -34,6 +39,7 @@
             $this->assertSame($form, $instance->getDelegate());
             $this->assertSame($app, $instance->getApplication());
         }
+
 
         public function testCreateElement()
         {
@@ -54,7 +60,6 @@
 
             $this->assertSame($app, $instance->getApplication());
         }
-
 
         public function testMeta()
         {
@@ -90,6 +95,34 @@
 
             $instance->unsetMeta();
             $this->assertNull($instance->getMeta());
+        }
+
+
+        public function testModels()
+        {
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will($this->returnValue($form = $this->getFormMock()));
+
+            $instance = $this->getInstance($app);
+
+            $this->assertFalse($instance->currentModel());
+
+            $model1 = $this->getModelObjectMock($obj1 = ['name' => uniqid()]);
+            $this->assertSame($form->model($model1, []), $instance->model($model1, []));
+            $this->assertSame($model1, $instance->currentModel());
+
+            $model2 = $this->getModelObjectMock($obj2 = ['name' => uniqid()]);
+            $instance->setModel($model2);
+            $this->assertSame($model2, $instance->currentModel());
+            $this->assertSame([$model1, $model2], $instance->getModels());
+
+            $instance->unsetModel();
+            $this->assertSame($model1, $instance->currentModel());
+
+            $instance->unsetModel();
+            $this->assertFalse($instance->currentModel());
+
         }
 
 

@@ -1,5 +1,6 @@
 <?php
     namespace LaravelCommode\Bladed\DefaultCommands;
+    use Illuminate\Database\Eloquent\Model;
     use Illuminate\Foundation\Application;
     use Illuminate\Html\FormBuilder;
     use LaravelCommode\Bladed\Commands\ABladedCommand;
@@ -20,6 +21,13 @@
          */
         private $laraForm;
 
+        private $models = [];
+
+        /**
+         * @var MetaManager
+         */
+        private $metaManager;
+
         public function __construct(Application $application)
         {
             parent::__construct($application);
@@ -33,7 +41,45 @@
             return \phpQuery::pq("<{$element}></{$element}>");
         }
 
+        //<editor-fold desc="Working with models">
 
+
+        public function unsetModel()
+        {
+            array_pop($this->models);
+        }
+
+        public function model($model, array $options = [])
+        {
+            $this->models[] = $model;
+            return $this->getDelegate()->model(last($this->models), $options);
+        }
+
+        /**
+         * @return mixed|Model
+         */
+        public function currentModel()
+        {
+            return last($this->models);
+        }
+
+        /**
+         * @return Model[]|\mixed[]
+         */
+        public function getModels()
+        {
+            return $this->models;
+        }
+
+        /**
+         * @param $model
+         */
+        public function setModel($model)
+        {
+            $this->models[] = $model;
+        }
+
+        //</editor-fold>
 
         //<editor-fold desc="Working with MetaData">
         /**
