@@ -246,6 +246,7 @@ Command description list:
     <tr>
         <th>Method</th>
         <th>Description</th>
+        <th>Returns</th>
     </tr>
     <tr>
         <td>set(&$var, $value)</td>
@@ -253,6 +254,7 @@ Command description list:
             Set's variables value for view scope, as 
             <code>&lt;?php $var = $value; ?&gt;</code>
         </td>
+        <td>null</td>
     </tr>
     <tr>
         <td>setIf(&$var, $value)</td>
@@ -260,6 +262,7 @@ Command description list:
             Set's variables value for view scope, as 
             <code>&lt;?php $var = isset($var) ? $var : $value; ?&gt;</code>
         </td>
+        <td>null</td>
     </tr>
     <tr>
         <td>share($key, $value)</td>
@@ -267,6 +270,7 @@ Command description list:
             Shares $value as $key within environment template, as 
             <code>&lt;?php $__env->share($key, $value) ?&gt;</code>
         </td>
+        <td>null</td>
     </tr>
     <tr>
         <td>l($id, array $parameters = array(), $domain = 'messages', $locale = null)</td>
@@ -274,20 +278,46 @@ Command description list:
             Triggers laravel's <code>trans($id, array $parameters = array(), $domain = 'messages', $locale = null)</code>
             function.
         </td>
+        <td>string</td>
     </tr>
     <tr>
         <td>dd($parameterN)</td>
         <td>
             Triggers laravel's <code>dd($parameterN)</code>function.
         </td>
+        <td>null</td>
     </tr>
     <tr>
         <td>var_dump($parameterN)</td>
         <td>
             Triggers <code>var_dump($parameterN)</code>function.
         </td>
+        <td>null</td>
     </tr>
 </table>
+<!--
+###Form
 
+Form command provider wraps laravel's form builder and provides functionality for managing 
+models, meta-data(via `LaravelCommode\Common\Meta\LocalizedMeta\MetaData`) and wraps all "inputs" with 
+\phpQueryObject to provide more flexibility for form templates.
+
+Class responsible: `LaravelCommode\Bladed\DefaultCommands\Form` <br />
+Command namespace: `form` <br />
+
+Command description list:
+
+<table width="100%">
+    <tr>
+        <th>Method</th>
+        <th>Description</th>
+        <th>Returns</th>
+    </tr>
+    <tr>
+        <td>
+        </td>
+    </tr>
+</table>
+-->
 ##<a name="reference">IoC reference table</a>
 
