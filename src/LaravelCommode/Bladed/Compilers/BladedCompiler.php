@@ -139,31 +139,42 @@
             return $this->application->make("{$this->iocRegistry}.{$name}");
         }
 
-        protected function getStateParser()
-        {
-            return function($matches)
-            {
-
-                $result = "<?php echo {$this->registryFunction}('{$matches[2]}', \$__env)->{$matches[4]}{$matches[5]} ?>";
-
-                return $result;
-            };
-        }
-
-        protected function getCacheStateParser()
+        protected function getScope()
         {
             $evalScope = function ($eval, $scope) {
                 extract($scope);
                 return eval($eval);
             };
 
-            $evalScope = $evalScope->bindTo(null);
+            return $evalScope->bindTo(null);
+        }
+
+        protected function composeTemplate($template)
+        {
+            return strtr($template, [
+                '$'     => '(:var)',
+                '<?php' => '(:<php)',
+                '<?='   => '(:<ephp)',
+                '?>'    => '(:php>)'
+            ]);
+        }
+
+        protected function getStateParser()
+        {
+            return function($matches)
+            {
+                return "<?php echo {$this->registryFunction}('{$matches[2]}', \$__env)->{$matches[4]}{$matches[5]} ?>";
+            };
+        }
+
+        protected function getCacheStateParser()
+        {
+            $evalScope = $this->getScope();
 
             return function($matches) use ($evalScope)
             {
                 $eval = "return {$this->registryFunction}('{$matches[2]}', \$app->make('view'))->{$matches[4]}{$matches[5]};";
-                $result = $evalScope($eval, ['app' => $this->application]);
-                return $result;
+                return $evalScope($eval, ['app' => $this->application]);
             };
         }
 
@@ -171,9 +182,7 @@
         {
             return function($matches)
             {
-                $result = "<?php if({$this->registryFunction}('{$matches[2]}', \$__env)->{$matches[4]}{$matches[5]}): ?>";
-
-                return $result;
+                return "<?php if({$this->registryFunction}('{$matches[2]}', \$__env)->{$matches[4]}{$matches[5]}): ?>";
             };
         }
 
@@ -181,56 +190,35 @@
         {
             return function($matches)
             {
-                $result = "<?php if(!{$this->registryFunction}('{$matches[2]}', \$__env)->{$matches[4]}{$matches[5]}): ?>";
-
-                return $result;
+                return "<?php if(!{$this->registryFunction}('{$matches[2]}', \$__env)->{$matches[4]}{$matches[5]}): ?>";
             };
         }
 
         protected function getTplParser()
         {
             return function($matches) {
-                $bag = $matches[2];
-                $method = $matches[4];
-                $template = $matches[7];
-                $params = $matches[13];
+                $template = $this->composeTemplate($matches[7]);
 
-                $result = "<?php echo {$this->registryFunction}('{$bag}', \$__env)->{$method}";
-
-
-                $template = str_replace('$', '(:var)', $template);
-                $template = str_replace('<?php', '(:<php)', $template);
-                $template = str_replace('<?=', '(:<ephp)', $template);
-                $template = str_replace('?>', '(:php>)', $template);
-
-                $result .= '((new \LaravelCommode\Bladed\Compilers\TemplateCompiler(\Bladed::getStringCompiler(), $__env))->setTemplate("'.addslashes($template).'")'.($params == '' ? '': ', '.$params).') ?>';
-
-                return $result;
+                return $result = '<?php echo '.$this->registryFunction.'(\''.
+                    $matches[2].'\', $__env)->'.$matches[4].'('.
+                    '(new \LaravelCommode\Bladed\Compilers\TemplateCompiler(\Bladed::getStringCompiler(), $__env)'.
+                    ')->setTemplate("'.addslashes($template).'")'.($matches[13] === '' ? '': ', '.$matches[13]).') ?>';
             };
         }
 
         protected function getCacheTplParser()
         {
-            $evalScope = function ($eval, $scope) {
-                extract($scope);
-                return eval($eval);
-            };
-
-            $evalScope = $evalScope->bindTo(null);
+            $evalScope = $this->getScope();
 
             return function($matches) use ($evalScope) {
                 $bag = $matches[2];
                 $method = $matches[4];
-                $template = $matches[7];
                 $params = $matches[13];
 
                 $result = "return {$this->registryFunction}('{$bag}', \$app->make('view'))->{$method}";
 
 
-                $template = str_replace('$', '(:var)', $template);
-                $template = str_replace('<?php', '(:<php)', $template);
-                $template = str_replace('<?=', '(:<ephp)', $template);
-                $template = str_replace('?>', '(:php>)', $template);
+                $template = $this->composeTemplate($matches[7]);
 
                 $result .= '((new \LaravelCommode\Bladed\Compilers\TemplateCompiler($app->make("commode.bladed")->getStringCompiler(), $app->make("view")))->setTemplate("'.addslashes($template).'")'.($params == '' ? '': ', '.$params).') ?>';
 
