@@ -235,64 +235,55 @@ View usage:
 
 ##<a name="commands">Available commands by default</a>
 
+###Scope 
 
+Class responsible: `LaravelCommode\Bladed\DefaultCommands\Scope`
+Command namespace: `scope`
+Command description list:
 
-<table width="100%" border="1" style="border: 1px solid black; border-spacing: 0; border-collapse: collapse">
+<table width="100%">
     <tr>
-        <th>Command</th>
-        <th>Class responsible</th>
-        <th width="60%">Class responsible</th>
+        <th>Method</th>
+        <th>Description</th>
     </tr>
     <tr>
-        <td>scope</td>
-        <td>LaravelCommode\Bladed\DefaultCommands\Scope</td>
+        <td>set(&$var, $value)</td>
         <td>
-            <table width="100%">
-                <tr>
-                    <th>Method</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>set(&$var, $value)</td>
-                    <td>
-                        Set's variables value for view scope, as 
-                        <code>&lt;?php $var = $value; ?&gt;</code>
-                    </td>
-                </tr>
-                <tr>
-                    <td>setIf(&$var, $value)</td>
-                    <td>
-                        Set's variables value for view scope, as 
-                        <code>&lt;?php $var = isset($var) ? $var : $value; ?&gt;</code>
-                    </td>
-                </tr>
-                <tr>
-                    <td>share($key, $value)</td>
-                    <td>
-                        Shares $value as $key within environment template, as 
-                        <code>&lt;?php $__env->share($key, $value) ?&gt;</code>
-                    </td>
-                </tr>
-                <tr>
-                    <td>l($id, array $parameters = array(), $domain = 'messages', $locale = null)</td>
-                    <td>
-                        Triggers laravel's <code>trans($id, array $parameters = array(), $domain = 'messages', $locale = null)</code>
-                        function.
-                    </td>
-                </tr>
-                <tr>
-                    <td>dd($parameterN)</td>
-                    <td>
-                        Triggers laravel's <code>dd($parameterN)</code>function.
-                    </td>
-                </tr>
-                <tr>
-                    <td>var_dump($parameterN)</td>
-                    <td>
-                        Triggers <code>var_dump($parameterN)</code>function.
-                    </td>
-                </tr>
-            </table>
+            Set's variables value for view scope, as 
+            <code>&lt;?php $var = $value; ?&gt;</code>
+        </td>
+    </tr>
+    <tr>
+        <td>setIf(&$var, $value)</td>
+        <td>
+            Set's variables value for view scope, as 
+            <code>&lt;?php $var = isset($var) ? $var : $value; ?&gt;</code>
+        </td>
+    </tr>
+    <tr>
+        <td>share($key, $value)</td>
+        <td>
+            Shares $value as $key within environment template, as 
+            <code>&lt;?php $__env->share($key, $value) ?&gt;</code>
+        </td>
+    </tr>
+    <tr>
+        <td>l($id, array $parameters = array(), $domain = 'messages', $locale = null)</td>
+        <td>
+            Triggers laravel's <code>trans($id, array $parameters = array(), $domain = 'messages', $locale = null)</code>
+            function.
+        </td>
+    </tr>
+    <tr>
+        <td>dd($parameterN)</td>
+        <td>
+            Triggers laravel's <code>dd($parameterN)</code>function.
+        </td>
+    </tr>
+    <tr>
+        <td>var_dump($parameterN)</td>
+        <td>
+            Triggers <code>var_dump($parameterN)</code>function.
         </td>
     </tr>
 </table>
