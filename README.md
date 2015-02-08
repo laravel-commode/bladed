@@ -237,8 +237,9 @@ View usage:
 
 ###Scope 
 
-Class responsible: `LaravelCommode\Bladed\DefaultCommands\Scope`
-Command namespace: `scope`
+Class responsible: `LaravelCommode\Bladed\DefaultCommands\Scope` <br />
+Command namespace: `scope` <br />
+
 Command description list:
 
 <table width="100%">
