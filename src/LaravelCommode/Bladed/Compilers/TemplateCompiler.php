@@ -71,7 +71,7 @@
          * @param array $arguments
          * @return $this
          */
-        public function setArguments($arguments)
+        public function setArguments(array $arguments)
         {
             $this->arguments = $arguments;
             return $this;
@@ -81,7 +81,7 @@
          * @param array $arguments
          * @return $this
          */
-        public function appendArguments($arguments)
+        public function appendArguments(array $arguments)
         {
             $this->arguments= array_merge($this->arguments, $arguments);
             return $this;

@@ -18,9 +18,9 @@
     + <a href="#loops">Loops</a>
     + <a href="#template">Template</a>
     + <a href="#cached_template">Cached template</a>
-+ <a href="#installing">Templates</a>
-+ <a href="#installing">Available commands by default</a>
-+ <a href="#installing">IoC reference table</a>
++ <a href="#templating">Templates</a>
++ <a href="#commands">Available commands by default</a>
++ <a href="#reference">IoC reference table</a>
 
 ##<a name="installing">Installing</a>
 
@@ -49,20 +49,21 @@ service provider in your application config.
 user to create extensions or widgets based upon this mechanism. So to start working with it you need to do couple 
 of things: create a **command provider** and register it in **bladed manager**.
  
-**Command provider** is a class that extends `\LaravelCommode\Bladed\Commands\ABladedCommand` or 
-`\LaravelCommode\Bladed\Commands\ADelegateCommand` and provides a set of **commands**(methods) that might 
-contain template rendering logic or provide an interface to communicate with application services. **Command 
-provider** have straight access to application's IoC container and to view environment from two protected 
-methods: `ABladedCommand::getApplication()` and `ABladedCommand::getEnvironment()`. All **Command 
-provider** are constructed in IoC container, so feel free to override constructors, but don't forget to call 
-parent's one. **Command provider** can be extended in a runtime, just like all macro-classes in laravel.
+**Command provider** is a class that extends `LaravelCommode\Bladed\Commands\ABladedCommand` or 
+`LaravelCommode\Bladed\Commands\ADelegateCommand` and provides a set of **template commands**(methods) that 
+might contain template rendering logic or provide an interface to communicate with application services. 
+**Command provider** has straight access to application's IoC container and to view environment from two 
+protected methods: `ABladedCommand::getApplication()` and `ABladedCommand::getEnvironment()`. All 
+**command providers** are constructed in IoC container, so feel free to override constructors, but don't 
+forget to trigger the parent's one. **Command provider** can be extended in a runtime, just like all 
+macro-classes in laravel.
 
 All **command providers** registered in **bladed manager** are basically available from laravel's IoC container 
 as singletons.
 
 ##<a name="syntax">Syntax</a>
 
-###<a name="statement">Statement</a>
+####<a name="statement">Statement</a>
     
 Triggers command provider's method or property - all returned values will be rendered.
     
@@ -73,7 +74,7 @@ Triggers command provider's method or property - all returned values will be ren
         ->otherMethod($param1, $paramN) @> 
     
 
-###<a name="cached_statement">Cached statement</a>
+####<a name="cached_statement">Cached statement</a>
 
 Triggers command provider's method or property - all returned values will be rendered only once.
 
@@ -83,7 +84,7 @@ Triggers command provider's method or property - all returned values will be ren
     @::command.method($param1, $paramN)     - return chaining is available
         ->otherMethod($param1, $paramN) @> 
     
-###<a name="conditions">Conditions</a>
+####<a name="conditions">Conditions</a>
 
 Conditions are base upon command provider's method execution results or properties.
     
@@ -113,7 +114,7 @@ Conditions are base upon command provider's method execution results or properti
     @?>                         -   end if
 
 
-###<a name="loops">Loops</a>
+####<a name="loops">Loops</a>
 
 Simple alternative for native @foreach and @for loops
 
@@ -146,7 +147,7 @@ Simple alternative for native @foreach and @for loops
                                         @endfor
     
 
-###<a name="template">Template</a>
+####<a name="template">Template</a>
 
 `Bladed` extension provides **template action** system.
 
@@ -161,7 +162,7 @@ Simple alternative for native @foreach and @for loops
 All method's that will dial templates will always always receive 
 `LaravelCommode\Bladed\Compilers\TemplateCompiler` as first argument and then all the others.
     
-###<a name="cached_template">Cached template</a>
+####<a name="cached_template">Cached template</a>
 
 **Template action** that will be rendered only at once.
 
@@ -172,3 +173,67 @@ All method's that will dial templates will always always receive
     @::|command.method {
         This template can be rendered later. {{$renderTime}}
     }|($param1, $paramN)@>
+    >
+    
+##<a name="templating">Templates</a>
+
+`Bladed` provides a small template system. All methods that are supposed to be **template actions** will 
+receive `LaravelCommode\Bladed\Compilers\TemplateCompiler` as first argument. You can pass or append variable 
+values into it's parameter bag through two methods `TemplateCompiler::setArguments(array $params)` and 
+`TemplateCompiler::appendArguments(array $params)`. Template can be rendered by calling 
+`TemplateCompiler::render(array $params = [])`  or by forcing it's conversion into string.
+
+Example bellow might be a bit useless in production, but still it shows the functionality and it might remind you 
+ASP.NET Razor engine:
+
+Command provider:
+
+    <?php
+        namespace Application\Bladed\Widgets\Form;
+        
+        use LaravelCommode\Bladed\Commands\ABladedCommand;
+        use LaravelCommode\Bladed\Compilers\TemplateCompiler;
+        
+        class FormWidget extends ADelegateBladedCommand
+        {
+            public function getDelegate()
+            {
+                return $this->getApplication()->make('form');
+            }
+            
+            public function wrapFormModel(TemplateCompiler $template, $viewModel, array $attributes = [])
+            {
+                return $this->open($viewModel, $attributes).
+                    $template->setArguments($attributes).
+                    $this->close();
+            }
+        }
+
+Registering command with BladedManager facade in service:
+    
+        /** ...service provider code ... **/
+        
+        /**
+        * Service provider registration
+        */
+        public function register()
+        {
+            \BladedManager::registerCommandNamespace('form', 'Application\Bladed\Widgets\Form\FormWidget');
+            // or \BladedManager::registerCommandNamespaces(['form' => 'Application\Bladed\Widgets\Form\FormWidget']);
+            
+            // or $this->application->make('commode.bladed')-> ...
+        }
+        
+View usage:
+
+    @|form.wrapFormModel {
+        
+        @form.text('name', null, ['class' => 'form-control']) @>
+        @form.password('password', ['class' => 'form-control']) @>
+        
+    }|($viewModel, $arguments)@>
+
+##<a name="commands">Available commands by default</a>
+
+##<a name="reference">IoC reference table</a>
+
