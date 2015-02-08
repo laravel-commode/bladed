@@ -3,6 +3,7 @@
 
     class FormTest extends \PHPUnit_Framework_TestCase
     {
+        //<editor-fold desc="Mocks and objects">
         protected function getAppMock()
         {
             return $this->getMock('Illuminate\Foundation\Application', ['make']);
@@ -27,6 +28,7 @@
         {
             return (object) $fields;
         }
+        //</editor-fold>
 
         public function testConstruct()
         {
@@ -40,7 +42,7 @@
             $this->assertSame($app, $instance->getApplication());
         }
 
-
+        //<editor-fold desc="PQ and element">
         public function testCreateElement()
         {
             $app = $this->getAppMock();
@@ -61,6 +63,25 @@
             $this->assertSame($app, $instance->getApplication());
         }
 
+        public function testWrapPQ()
+        {
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will($this->returnValue($form = $this->getFormMock()));
+
+            $instance = $this->getInstance($app);
+
+            $reflectionClass = new \ReflectionClass($instance);
+            $reflectionMethodCreateElement = $reflectionClass->getMethod('wrapPQ');
+
+            $reflectionMethodCreateElement->setAccessible(true);
+
+            $this->assertSame("<div></div>", $reflectionMethodCreateElement->invokeArgs($instance, ['<div></div>'])->__toString());
+
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Meta">
         public function testMeta()
         {
             $app = $this->getAppMock();
@@ -96,8 +117,9 @@
             $instance->unsetMeta();
             $this->assertNull($instance->getMeta());
         }
+        //</editor-fold>
 
-
+        //<editor-fold desc="Models">
         public function testModels()
         {
             $app = $this->getAppMock();
@@ -124,6 +146,193 @@
             $this->assertFalse($instance->currentModel());
 
         }
+        //</editor-fold>
 
+        //<editor-fold desc="Html">
+        public function testOpenClose()
+        {
+            $app = $this->getAppMock();
 
+            $app->expects($this->once())->method('make')->will($this->returnValue($form = $this->getFormMock()));
+
+            $formAttributes = ['class' => uniqid()];
+
+            $form->expects($this->once())->method('open')->with($this->callback(function ($attrs) use ($formAttributes) {
+                $this->assertSame($attrs, $formAttributes);
+                return $attrs === $formAttributes;
+            }));
+
+            $form->expects($this->once())->method('close');
+
+            $instance = $this->getInstance($app);
+
+            $instance->open($formAttributes);
+
+            $this->assertNotEmpty($instance->getModels());
+            $this->assertNull($instance->currentModel());
+
+            $instance->close();
+            $this->assertEmpty($instance->getModels());
+        }
+
+        public function testSelect()
+        {
+
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will(
+                $this->returnValue($form = $this->getFormMock())
+            );
+
+            $form->expects($this->once())->method('select');
+
+            $instance = $this->getInstance($app);
+
+            $instance->select('model', ['a' => 5, 'b' => 5]);
+        }
+
+        public function testSubmit()
+        {
+
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will(
+                $this->returnValue($form = $this->getFormMock())
+            );
+
+            $form->expects($this->once())->method('submit');
+
+            $instance = $this->getInstance($app);
+
+            $instance->submit('model', ['a' => 5, 'b' => 5]);
+        }
+
+        public function testLabel()
+        {
+
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will(
+                $this->returnValue($form = $this->getFormMock())
+            );
+
+            $instance = $this->getInstance($app);
+
+            $this->assertSame("<label>model</label>", $instance->label('model')->__toString());
+        }
+
+        public function testHidden()
+        {
+
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will(
+                $this->returnValue($form = $this->getFormMock())
+            );
+
+            $form->expects($this->once())->method('hidden');
+
+            $instance = $this->getInstance($app);
+
+            $instance->hidden('model', 'value', ['a' => 5, 'b' => 5]);
+        }
+
+        public function testCheckbox()
+        {
+
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will(
+                $this->returnValue($form = $this->getFormMock())
+            );
+
+            $form->expects($this->once())->method('checkbox');
+
+            $instance = $this->getInstance($app);
+
+            $instance->checkbox('model');
+        }
+
+        public function testRadio()
+        {
+
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will(
+                $this->returnValue($form = $this->getFormMock())
+            );
+
+            $form->expects($this->once())->method('radio');
+
+            $instance = $this->getInstance($app);
+
+            $instance->radio('model');
+        }
+
+        public function testText()
+        {
+
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will(
+                $this->returnValue($form = $this->getFormMock())
+            );
+
+            $form->expects($this->exactly(2))->method('text');
+
+            $instance = $this->getInstance($app);
+
+            $instance->text('model');
+
+            $meta = $this->getMetaMock();
+            $meta->en_model = uniqid();
+
+            $instance->setMeta($meta);
+            $instance->text('model');
+        }
+
+        public function testPassword()
+        {
+
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will(
+                $this->returnValue($form = $this->getFormMock())
+            );
+
+            $form->expects($this->exactly(2))->method('password');
+
+            $instance = $this->getInstance($app);
+
+            $instance->password('model');
+
+            $meta = $this->getMetaMock();
+            $meta->en_model = uniqid();
+
+            $instance->setMeta($meta);
+            $instance->password('model');
+        }
+
+        public function testTextarea()
+        {
+
+            $app = $this->getAppMock();
+
+            $app->expects($this->once())->method('make')->will(
+                $this->returnValue($form = $this->getFormMock())
+            );
+
+            $form->expects($this->exactly(2))->method('textarea');
+
+            $instance = $this->getInstance($app);
+
+            $instance->textarea('model');
+
+            $meta = $this->getMetaMock();
+            $meta->en_model = uniqid();
+
+            $instance->setMeta($meta);
+            $instance->textarea('model');
+        }
+        //</editor-fold>
     }

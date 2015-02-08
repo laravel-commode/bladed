@@ -41,6 +41,89 @@
             return \phpQuery::pq("<{$element}></{$element}>");
         }
 
+        protected function wrapPQ($value)
+        {
+            return \phpQuery::pq($value);
+        }
+
+        //<editor-fold desc="Inputs and Form">
+
+        public function open(array $options = [])
+        {
+            $this->models[] = null;
+            return $this->laraForm->open($options);
+        }
+
+        public function close()
+        {
+            $this->unsetModel();
+            return $this->laraForm->close();
+        }
+
+        public function select($name, array $list = [], $selected = null, array $parameters = [])
+        {
+            return $this->wrapPQ($this->laraForm->select($name, $list, $selected, $parameters));
+        }
+
+        public function submit($value, array $options = [])
+        {
+            return $this->wrapPQ($this->laraForm->submit($value,$options));
+        }
+
+        public function label($text)
+        {
+            return $this->wrapPQ('<label>')->html($text);
+        }
+
+        public  function hidden($field, $value = null, array $options = [])
+        {
+            return $this->wrapPQ($this->laraForm->hidden($field, $value, $options));
+        }
+
+        public function text($field, $value = null, array $options = [])
+        {
+            $textBox = $this->wrapPQ($this->laraForm->text($field, $value, $options));
+
+            if ($this->metaManager->currentMetaExists()) {
+                $textBox->attr('placeholder', $this->metaManager->getCurrentMetaValue($field));
+            }
+
+            return $textBox;
+        }
+
+        public function password($field, array $options = [])
+        {
+            $password = $this->wrapPQ($this->laraForm->password($field, $options));;
+
+            if ($this->metaManager->currentMetaExists()) {
+                $password->attr('placeholder', $this->metaManager->getCurrentMetaValue($field));
+            }
+
+            return $password;
+        }
+
+        public function textarea($field, $value = null, array $options = [])
+        {
+            $textarea = $this->wrapPQ($this->laraForm->textarea($field, $value, $options));
+
+            if ($this->metaManager->currentMetaExists()) {
+                $textarea->attr('placeholder', $this->metaManager->getCurrentMetaValue($field));
+            }
+            return $textarea;
+        }
+
+        public function checkbox($field, $value = null, $checked = null, array $options = [])
+        {
+            return $this->wrapPQ($this->laraForm->checkbox($field, $value, $checked, $options));
+        }
+        public function radio($field, $value = null, $checked = null, array $options = [])
+        {
+            return $this->wrapPQ($this->laraForm->radio($field, $value, $checked, $options));
+        }
+
+
+        //</editor-fold>
+
         //<editor-fold desc="Working with models">
 
 
