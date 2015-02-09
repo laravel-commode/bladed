@@ -65,9 +65,9 @@
             return $this->wrapPQ($this->laraForm->select($name, $list, $selected, $parameters));
         }
 
-        public function submit($value, array $options = [])
+        public function submit($name, array $options = [])
         {
-            return $this->wrapPQ($this->laraForm->submit($value,$options));
+            return $this->wrapPQ($this->laraForm->submit($name, $options));
         }
 
         public function label($text)
@@ -75,7 +75,7 @@
             return $this->wrapPQ('<label>')->html($text);
         }
 
-        public  function hidden($field, $value = null, array $options = [])
+        public function hidden($field, $value = null, array $options = [])
         {
             return $this->wrapPQ($this->laraForm->hidden($field, $value, $options));
         }

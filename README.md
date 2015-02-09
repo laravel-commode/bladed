@@ -295,7 +295,7 @@ Command description list:
         <td>null</td>
     </tr>
 </table>
-<!--
+<
 ###Form
 
 Form command provider wraps laravel's form builder and provides functionality for managing 
@@ -314,10 +314,100 @@ Command description list:
         <th>Returns</th>
     </tr>
     <tr>
+        <td>open(array $attributes = [])</td>
         <td>
+            Alternative to <code>Form::open(array $attributes = [])</code>
         </td>
+        <td>string</td>
+    </tr>
+    <tr>
+        <td>close()</td>
+        <td>
+            Alternative to <code>Form::close()</code>
+        </td>
+        <td>string</td>
+    </tr>
+    <tr>
+        <td>model($model, array $attributes = [])</td>
+        <td>
+            Alternative to <code>Form::model($model, array $attributes = [])</code>
+        </td>
+        <td>string</td>
+    </tr>
+    <tr>
+        <td>select($name, array $list = [], $selected = null, array $parameters = [])</td>
+        <td>
+            Alternative to <code>Form::select($name, array $list = [], $selected = null, array $parameters = [])</code>
+        </td>
+        <td>string|phpQueryObject</td>
+    </tr>
+    <tr>
+        <td>submit($name, array $options = [])</td>
+        <td>
+            Alternative to <code>Form::submit($name, array $options = [])</code>
+        </td>
+        <td>string|phpQueryObject</td>
+    </tr>
+    <tr>
+        <td>label($html)</td>
+        <td>
+            Returns label element with provided html
+        </td>
+        <td>string|phpQueryObject</td>
+    </tr>
+    <tr>
+        <td>hidden($field, $value = null, array $options = [])</td>
+        <td>
+            Alternative to <code>Form::hidden($field, $value = null, array $options = [])</code>
+        </td>
+        <td>string|phpQueryObject</td>
+    </tr>
+    <tr>
+        <td>text($field, $value = null, array $options = [])</td>
+        <td>
+            Alternative to <code>Form::text($field, $value = null, array $options = [])</code>.<br />
+            If meta is available appends placeholder attribute.
+        </td>
+        <td>string|phpQueryObject</td>
+    </tr>
+    <tr>
+        <td>textarea($field, $value = null, array $options = [])</td>
+        <td>
+            Alternative to <code>Form::textarea($field, $value = null, array $options = [])</code>.<br />
+            If meta is available appends placeholder attribute.
+        </td>
+        <td>string|phpQueryObject</td>
+    </tr>
+    <tr>
+        <td>password($field,  array $options = [])</td>
+        <td>
+            Alternative to <code>Form::password($field, array $options = [])</code>.<br />
+            If meta is available appends placeholder attribute.
+        </td>
+        <td>string|phpQueryObject</td>
+    </tr>
+    <tr>
+        <td>submit($name, array $options = [])</td>
+        <td>
+            Alternative to <code>Form::submit($name, array $options = [])</code>
+        </td>
+        <td>string|phpQueryObject</td>
+    </tr>
+    <tr>
+        <td>checkbox($field, $value = null, $checked = null, array $options = [])</td>
+        <td>
+            Alternative to <code>Form::checkbox($field, $value = null, $checked = null, array $options = [])</code>
+        </td>
+        <td>string|phpQueryObject</td>
+    </tr>
+    <tr>
+        <td>radio($field, $value = null, $checked = null, array $options = [])</td>
+        <td>
+            Alternative to <code>Form::radio($field, $value = null, $checked = null, array $options = [])</code>
+        </td>
+        <td>string|phpQueryObject</td>
     </tr>
 </table>
--->
+
 ##<a name="reference">IoC reference table</a>
 
