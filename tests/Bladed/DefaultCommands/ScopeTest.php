@@ -5,9 +5,9 @@
 
     class ScopeTest extends \PHPUnit_Framework_TestCase
     {
-        protected function mockApplication()
+        protected function mockApplication(array $methods = [])
         {
-            return $this->getMock('Illuminate\Foundation\Application');
+            return $this->getMock('Illuminate\Foundation\Application', $methods);
         }
 
         protected function mockView()
@@ -55,6 +55,23 @@
             }));
 
             $instance->share($key, $value);
+        }
+
+        public function testL()
+        {
+            $instance = $this->getInstance($app = $this->mockApplication(['make']), $view = $this->mockView());
+
+            $translatorMock = $this->getMock('Illuminate\Translation\Translator', ['trans']);
+
+            $id = 'validation.custom.someValue';
+            $returnValue = uniqid();
+
+            $translatorMock->expects($this->once())->method('trans')->with($id)->will($this->returnValue($returnValue));
+
+            $app->expects($this->once())->method('make')->with('translator')->will($this->returnValue($translatorMock));
+
+            \Illuminate\Support\Facades\Facade::setFacadeApplication($app);
+            $this->assertSame($returnValue, $instance->l($id));
         }
 
         public function testDumps()

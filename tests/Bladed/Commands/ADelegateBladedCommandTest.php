@@ -51,6 +51,7 @@
             $this->setExpectedException('BadMethodCallException');
 
             $instance->__call('testings');
+            $instance->__call('testings');
         }
 
         public function testing()

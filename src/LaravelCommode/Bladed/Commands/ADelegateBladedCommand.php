@@ -1,8 +1,8 @@
 <?php
     namespace LaravelCommode\Bladed\Commands;
-    use Illuminate\Foundation\Application;
-    use Illuminate\View\Factory;
-    use LaravelCommode\Bladed\Interfaces\IBladedCommand;
+
+    use BadMethodCallException,
+        Exception;
 
     /**
      * Created by PhpStorm.
@@ -25,11 +25,11 @@
         {
             try {
                 $res = parent::__call($method, $arguments);
-            } catch(\BadMethodCallException $e) {
+            } catch(BadMethodCallException $e) {
                 try {
                     $this->delegeteTo = $this->delegeteTo !== null ?: $this->getDelegate();
                     $res = call_user_func_array([$this->delegeteTo, $method], $arguments);
-                } catch(\Exception $ex) {
+                } catch(Exception $ex) {
                     throw $e;
                 }
 
