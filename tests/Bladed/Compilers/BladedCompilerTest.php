@@ -188,7 +188,7 @@
                 $this->assertEquals("<?php endfor; ?>", $closure("@up>"));
 
                 $this->assertEquals("<?php for(\$var=count(\$vars)-1;\$var>0;\$var--): ?>", $closure("@down(\$vars||\$var)"));
-                $this->assertEquals("<?php for(\$var=count(\$vars)-1;\$var>0;\$var--): ?>\n<?php \$key= \$vars[\$var];?>", $closure("@down(\$vars||\$var||\$key)"));
+                $this->assertEquals("<?php for(\$var=count(\$vars)-1;\$var>0;\$var--): ?>\n<?php \$key = \$vars[\$var];?>", $closure("@down(\$vars||\$var||\$key)"));
                 $this->assertEquals("<?php endfor; ?>", $closure("@down>"));
 
                 $template = "@|ns.method {text <?=\$var?> <?php echo \$var;?>}|([], \$var)@>";

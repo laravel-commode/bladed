@@ -233,14 +233,15 @@
                 $return = '<?php ';
                 switch($matches[2])
                 {
+                    case 'in':
+                        $return .= 'foreach('.$matches[3].' as ';
+                        $return .= ($matches[7] === '') ? $matches[5] : ($matches[9].' => '.$matches[5]);
+                        return $return . '): ?>';
+                        break;
                     case 'down':
                         $return .= 'for('.$matches[5].'=count('.$matches[3].')-1;';
                         $return .= $matches[5].'>0;';
                         $return .= $matches[5].'--): ?>';
-
-                        if ($matches[9] !== '') {
-                            $return .= "\n".'<?php '.$matches[9].'= '.$matches[3].'['.$matches[5].'];?>';
-                        }
 
                         break;
                     case 'up':
@@ -248,16 +249,11 @@
                         $return .= $matches[5].'<$____length=count('.$matches[3].');';
                         $return .= $matches[5].'++): ?>';
 
-                        if ($matches[9] !== '') {
-                            $return .= "\n".'<?php '.$matches[9].' = '.$matches[3].'['.$matches[5].'];?>';
-                        }
+                        break;
+                }
 
-                        break;
-                    case 'in':
-                        $return .= 'foreach('.$matches[3].' as ';
-                        $return .= ($matches[7] === '') ? $matches[5] : ($matches[9].' => '.$matches[5]);
-                        $return .= '): ?>';
-                        break;
+                if ($matches[9] !== '') {
+                    $return .= "\n".'<?php '.$matches[9].' = '.$matches[3].'['.$matches[5].'];?>';
                 }
 
                 return $return;
