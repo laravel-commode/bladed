@@ -10,14 +10,14 @@
 ####Contents
 
 + <a href="#installing">Installing</a>
-+ <a href="#creating_command">Creating a command namespace</a>
-+ <a href="#syntax">Syntax</a>
-    + <a href="#statement">Statement</a>
-    + <a href="#cached_statement">Cached statement</a>
-    + <a href="#condition">Conditions</a>
-    + <a href="#loops">Loops</a>
-    + <a href="#template">Template</a>
-    + <a href="#cached_template">Cached template</a>
++ <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax">Syntax</a>
+    + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#statements">Statements</a>
+    + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#cached_statement">Cached statements</a>
+    + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#condition">Conditions</a>
+    + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#loops">Loops</a>
+    + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#template_action">Template</a>
+    + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#cached_template_action">Cached template</a>
++ <a href="https://github.com/laravel-commode/bladed/wiki/02.-Command-namespace">Creating a command namespace</a>
 + <a href="#templating">Templates</a>
 + <a href="#commands">Available commands by default</a>
 + <a href="#reference">IoC reference table</a>
@@ -42,7 +42,10 @@ service provider in your application config.
                 'LaravelCommode\Bladed\BladedServiceProvider'
             ]
         ];
-        
+
+
+<!--      
+
 ##<a name="creating_command">Creating a command namespace</a>
 
 `Bladed` package was developed to provide more possibilities for view logic, and basically to let the final 
@@ -411,3 +414,4 @@ Command description list:
 
 ##<a name="reference">IoC reference table</a>
 
+-->
