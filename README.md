@@ -18,7 +18,7 @@
     + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#template_action">Template</a>
     + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#cached_template_action">Cached template</a>
 + <a href="https://github.com/laravel-commode/bladed/wiki/02.-Command-namespace">Creating a command namespace</a>
-+ <a href="#templating">Templates</a>
++ <a href="https://github.com/laravel-commode/bladed/wiki/02.-Wrappers">03.-Wrappers</a>
 + <a href="#commands">Available commands by default</a>
 + <a href="#reference">IoC reference table</a>
 
