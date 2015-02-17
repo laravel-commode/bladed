@@ -15,8 +15,8 @@
     + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#cached_statement">Cached statements</a>
     + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#condition">Conditions</a>
     + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#loops">Loops</a>
-    + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#template_action">Template</a>
-    + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#cached_template_action">Cached template</a>
+    + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#wrappers">Wrappers</a>
+    + <a href="https://github.com/laravel-commode/bladed/wiki/01.-Syntax#cached_wrappers">Cached wrappers</a>
 + <a href="https://github.com/laravel-commode/bladed/wiki/02.-Command-namespace">Creating a command namespace</a>
 + <a href="https://github.com/laravel-commode/bladed/wiki/03.-Wrappers">Wrappers</a>
 + <a href="#commands">Available commands by default</a>
