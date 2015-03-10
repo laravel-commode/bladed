@@ -41,7 +41,7 @@
             {
                 $this->app->singleton('commode.bladed', function ($app) {
                     $compiler = new BladedCompiler($app->make('blade.compiler'), $app, 'Bladed::getCommand', 'commode.bladed');
-                    $stringCompiler = new StringCompiler($app->make('files'), call_user_func($app->make('path.storage'), ['views']));
+                    $stringCompiler = new StringCompiler($app->make('files'), storage_path('views'));
                     return new BladedManager($compiler, $app, $stringCompiler);
                 });
 

@@ -34,6 +34,8 @@
                 $builder->setMethods(['bound', 'forceRegister', 'make', 'booting', 'singleton']);
             }));
 
+            \Illuminate\Support\Facades\Facade::setFacadeApplication($app);
+
             $app->expects($this->any(1))->method('make')->will($this->returnCallback(function($ns) use ($app) {
 
                 switch ($ns) {
@@ -51,7 +53,8 @@
                     case 'files':
                         return new Filesystem();
                     case 'path.storage':
-                        return function ($p) {return "./{$p[0]}";};
+                        return realpath(__FILE__);
+
                 }
 
             }));
