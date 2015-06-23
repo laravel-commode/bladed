@@ -50,11 +50,11 @@ class ABladedCommandTest extends PHPUnit_Framework_TestCase
     {
         $returnValue = uniqid('return');
 
-        $this->testInstance->extend('method', function () use ($returnValue) {
+        $this->testInstance->extend('methodTesting', function () use ($returnValue) {
             return $returnValue;
         }, true);
 
-        $this->assertSame($returnValue, $this->testInstance->method());
+        $this->assertSame($returnValue, $this->testInstance->methodTesting());
 
         try {
             $this->testInstance->nonExistantMethod();
