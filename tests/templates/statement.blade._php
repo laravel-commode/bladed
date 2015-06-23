@@ -1,0 +1,7 @@
+@command.propertyToTest @>
+
+@:command.propertyToTest @>
+
+@command.methodToTest($a, '6', 458, []) @>
+
+@:command.methodToTest() @>

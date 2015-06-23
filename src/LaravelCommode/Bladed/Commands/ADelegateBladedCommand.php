@@ -1,40 +1,22 @@
 <?php
-    namespace LaravelCommode\Bladed\Commands;
+namespace LaravelCommode\Bladed\Commands;
 
-    use BadMethodCallException,
-        Exception;
+use BadMethodCallException;
+use Exception;
 
-    /**
-     * Created by PhpStorm.
-     * User: madman
-     * Date: 03.02.15
-     * Time: 19:57
-     */
-    abstract class ADelegateBladedCommand extends ABladedCommand
+abstract class ADelegateBladedCommand extends ABladedCommand
+{
+    abstract public function getDelegate();
+
+    public function __call($method, array $arguments = [])
     {
-        private $delegeteTo;
+        $delegate = $this->getDelegate();
 
-        abstract public function getDelegate();
-
-        /**
-         * @param $method
-         * @param array $arguments
-         * @return mixed
-         */
-        public function __call($method, array $arguments = [])
-        {
-            try {
-                $res = parent::__call($method, $arguments);
-            } catch(BadMethodCallException $e) {
-                try {
-                    $this->delegeteTo = $this->delegeteTo !== null ?: $this->getDelegate();
-                    $res = call_user_func_array([$this->delegeteTo, $method], $arguments);
-                } catch(Exception $ex) {
-                    throw $e;
-                }
-
-            }
-
-            return $res;
+        if (is_callable([$delegate, $method])) {
+            return call_user_func_array([$delegate, $method], $arguments);
         }
+
+        return parent::__call($method, $arguments);
+
     }
+}

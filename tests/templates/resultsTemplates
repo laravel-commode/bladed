@@ -1,0 +1,13 @@
+<?php echo bladed('command', $__env)->template(bladedTemplate($__env)->setTemplate("
+    <div>dummy template</div>
+")) ?>
+
+<?php echo bladed('command', $__env)->template(bladedTemplate($__env)->setTemplate("
+    <div>dummy template <?php echo e((:var)var_usage); ?>}</div>
+"), $methodCall->call($args)) ?>
+
+<?php echo bladed('command', $__env)->template(bladedTemplate($__env)->setTemplate("
+    <div>dummy template</div>
+"), 'name', $var, []) ?>
+
+propertyToTestValue

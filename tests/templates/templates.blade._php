@@ -1,0 +1,15 @@
+@command.template() {
+    <div>dummy template</div>
+} @>
+
+@command.template($methodCall->call($args)) {
+    <div>dummy template {{$var_usage}}}</div>
+} @>
+
+@command.template('name', $var, []) {
+    <div>dummy template</div>
+} @>
+
+@:command.templateMethodTest(['name' => 'name']) {
+    <div>dummy template {{$name}}</div>
+} @>

@@ -1,32 +1,52 @@
 <?php
-    namespace LaravelCommode\Bladed\Interfaces;
+
+namespace LaravelCommode\Bladed\Interfaces;
+
+use Illuminate\Contracts\View\Factory;
+
+interface IBladedManager
+{
 
     /**
-     * Created by PhpStorm.
-     * User: madman
-     * Date: 03.02.15
-     * Time: 18:09
+     * Registers command namespace.
+     *
+     * @param string $commandNamespace Command namespace name
+     * @param string $bladedCommand Command namespace class
+     * @return $this
      */
-    interface IBladedManager
-    {
+    public function registerCommandNamespace($commandNamespace, $bladedCommand);
 
-        /**
-         * @param $commandNamespace
-         * @param $responsible
-         * @return mixed
-         */
-        public function registerCommandNamespace($commandNamespace, $responsible);
+    /**
+     * Registers multiple command namespace.
+     * Requires an array of ['commandNamespaceName' => BladedCommand::class].
+     *
+     * @param array $commandNamespaces
+     * @return $this
+     */
+    public function registerCommandNamespaces(array $commandNamespaces);
 
-        /**
-         * @param array $commandNamespaces
-         * @return mixed
-         */
-        public function registerCommandNamespaces(array $commandNamespaces);
+    /**
+     * Returns IBladedCommand instance by provided namespace name.
+     * Injects view environment(Factory) if it's not null.
+     *
+     * @param $commandNamespace
+     * @param Factory|null $environment
+     * @return IBladedCommand
+     */
+    public function getCommand($commandNamespace, Factory $environment = null);
 
-        /**
-         * @param $commandNamespace
-         * @param null $__env
-         * @return IBladedCommand
-         */
-        public function getCommand($commandNamespace, $__env = null);
-    }
+    /* @noinspection MoreThanThreeArgumentsInspection */
+    /**
+     * Extends command namespace by adding $callable under
+     * $methodName.
+     * You can bind $callable to command scope by passing
+     * $rebindScope as true value.
+     *
+     * @param $commandNamespace
+     * @param $methodName
+     * @param callable $callable
+     * @param bool $rebindScope
+     * @return mixed
+     */
+    public function extendCommand($commandNamespace, $methodName, \Closure $callable, $rebindScope = false);
+}

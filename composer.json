@@ -9,12 +9,13 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "4.2.*",
-        "illuminate/view": "4.2.*",
-        "illuminate/html": "4.2.*",
-        "laravel-commode/common": "dev-master",
-        "electrolinux/phpquery": "dev-master"
+        "php": ">=5.5.0",
+        "illuminate/support": "5.1.*",
+        "illuminate/view": "5.1.*",
+        "illuminate/html": "5.0.*@dev",
+        "laravel-commode/silent-service": "dev-master",
+        "laravel-commode/utils": "dev-master",
+        "bariew/phpquery": "dev-master"
     },
     "require-dev": {
         "satooshi/php-coveralls": "dev-master"
@@ -22,7 +23,10 @@
     "autoload": {
         "psr-0": {
             "LaravelCommode\\Bladed": "src/"
-        }
+        },
+        "classmap": [
+            "src/LaravelCommode/Bladed/helpers/helpers.php"
+        ]
     },
     "minimum-stability": "stable"
 }

@@ -1,211 +1,226 @@
 <?php
-    namespace LaravelCommode\Bladed\DefaultCommands;
-    use Illuminate\Database\Eloquent\Model;
-    use Illuminate\Foundation\Application;
-    use Illuminate\Html\FormBuilder;
-    use LaravelCommode\Bladed\Commands\ABladedCommand;
-    use LaravelCommode\Bladed\Commands\ADelegateBladedCommand;
-    use LaravelCommode\Bladed\DefaultCommands\Form\MetaManager;
-    use LaravelCommode\Common\Meta\LocalizedMeta\MetaData;
+namespace LaravelCommode\Bladed\DefaultCommands;
+
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Html\FormBuilder;
+
+use LaravelCommode\Bladed\Commands\ADelegateBladedCommand;
+use LaravelCommode\Bladed\DefaultCommands\Form\MetaQueManager;
+use LaravelCommode\Bladed\DefaultCommands\Form\MetaStack;
+use LaravelCommode\Bladed\DefaultCommands\Form\ModelStack;
+use LaravelCommode\Utils\Meta\Localization\MetaAttributes;
+
+class Form extends ADelegateBladedCommand
+{
+    /**
+     * @var FormBuilder
+     */
+    private $laraForm;
+
+    private $models = [];
 
     /**
-     * Created by PhpStorm.
-     * User: madman
-     * Date: 03.02.15
-     * Time: 21:28
+     * @var MetaStack|MetaAttributes[]
      */
-    class Form extends ADelegateBladedCommand
+    private $metaStack;
+
+    /**
+     * @var ModelStack
+     */
+    private $modelStack;
+
+    public function __construct(Application $application)
     {
-        /**
-         * @var FormBuilder
-         */
-        private $laraForm;
+        parent::__construct($application);
+        $this->modelStack = new ModelStack();
+        $this->metaStack = new MetaStack();
+    }
 
-        private $models = [];
+    protected function createElement($element)
+    {
+        return pq("<{$element}></{$element}>");
+    }
 
-        /**
-         * @var MetaManager
-         */
-        private $metaManager;
+    protected function wrapPQ($value)
+    {
+        return pq($value);
+    }
 
-        public function __construct(Application $application)
-        {
-            parent::__construct($application);
-            $this->laraForm = $application->make('form');
-            $this->metaManager = new MetaManager();
-            \phpQuery::newDocument();
+    //<editor-fold desc="Inputs and Form">
+
+    public function open(array $options = [])
+    {
+        $this->models[] = null;
+        return $this->getDelegate()->open($options);
+    }
+
+    public function close()
+    {
+        $this->unsetModel();
+        return $this->getDelegate()->close();
+    }
+
+    public function select($name, array $list = [], $selected = null, array $parameters = [])
+    {
+        return $this->wrapPQ($this->getDelegate()->select($name, $list, $selected, $parameters));
+    }
+
+    public function submit($name, array $options = [])
+    {
+        return $this->wrapPQ($this->getDelegate()->submit($name, $options));
+    }
+
+    public function label($text)
+    {
+        return $this->createElement('label')->html($text);
+    }
+
+    public function hidden($field, $value = null, array $options = [])
+    {
+        return $this->wrapPQ($this->getDelegate()->hidden($field, $value, $options));
+    }
+
+    public function text($field, $value = null, array $options = [])
+    {
+        $textBox = $this->wrapPQ($this->getDelegate()->text($field, $value, $options));
+
+        if (($meta = $this->getMeta()) !== null) {
+            $textBox->attr('placeholder', $meta->__get($field));
         }
 
-        protected function createElement($element)
-        {
-            return \phpQuery::pq("<{$element}></{$element}>");
+        return $textBox;
+    }
+
+    public function password($field, array $options = [])
+    {
+        $password = $this->wrapPQ($this->getDelegate()->password($field, $options));
+
+        if (($meta = $this->getMeta()) !== null) {
+            $password->attr('placeholder', $meta->__get($field));
         }
 
-        protected function wrapPQ($value)
-        {
-            return \phpQuery::pq($value);
+        return $password;
+    }
+
+    public function textarea($field, $value = null, array $options = [])
+    {
+        $textarea = $this->wrapPQ($this->getDelegate()->textarea($field, $value, $options));
+
+        if (($meta = $this->getMeta()) !== null) {
+            $textarea->attr('placeholder', $meta->__get($field));
         }
 
-        //<editor-fold desc="Inputs and Form">
+        return $textarea;
+    }
 
-        public function open(array $options = [])
-        {
-            $this->models[] = null;
-            return $this->laraForm->open($options);
-        }
+    public function checkbox($field, $value = null, $checked = null, array $options = [])
+    {
+        return $this->wrapPQ($this->getDelegate()->checkbox($field, $value, $checked, $options));
+    }
 
-        public function close()
-        {
-            $this->unsetModel();
-            return $this->laraForm->close();
-        }
-
-        public function select($name, array $list = [], $selected = null, array $parameters = [])
-        {
-            return $this->wrapPQ($this->laraForm->select($name, $list, $selected, $parameters));
-        }
-
-        public function submit($name, array $options = [])
-        {
-            return $this->wrapPQ($this->laraForm->submit($name, $options));
-        }
-
-        public function label($text)
-        {
-            return $this->wrapPQ('<label>')->html($text);
-        }
-
-        public function hidden($field, $value = null, array $options = [])
-        {
-            return $this->wrapPQ($this->laraForm->hidden($field, $value, $options));
-        }
-
-        public function text($field, $value = null, array $options = [])
-        {
-            $textBox = $this->wrapPQ($this->laraForm->text($field, $value, $options));
-
-            if ($this->metaManager->currentMetaExists()) {
-                $textBox->attr('placeholder', $this->metaManager->getCurrentMetaValue($field));
-            }
-
-            return $textBox;
-        }
-
-        public function password($field, array $options = [])
-        {
-            $password = $this->wrapPQ($this->laraForm->password($field, $options));;
-
-            if ($this->metaManager->currentMetaExists()) {
-                $password->attr('placeholder', $this->metaManager->getCurrentMetaValue($field));
-            }
-
-            return $password;
-        }
-
-        public function textarea($field, $value = null, array $options = [])
-        {
-            $textarea = $this->wrapPQ($this->laraForm->textarea($field, $value, $options));
-
-            if ($this->metaManager->currentMetaExists()) {
-                $textarea->attr('placeholder', $this->metaManager->getCurrentMetaValue($field));
-            }
-            return $textarea;
-        }
-
-        public function checkbox($field, $value = null, $checked = null, array $options = [])
-        {
-            return $this->wrapPQ($this->laraForm->checkbox($field, $value, $checked, $options));
-        }
-        public function radio($field, $value = null, $checked = null, array $options = [])
-        {
-            return $this->wrapPQ($this->laraForm->radio($field, $value, $checked, $options));
-        }
+    public function radio($field, $value = null, $checked = null, array $options = [])
+    {
+        return $this->wrapPQ($this->getDelegate()->radio($field, $value, $checked, $options));
+    }
 
 
-        //</editor-fold>
+    //</editor-fold>
 
-        //<editor-fold desc="Working with models">
+    //<editor-fold desc="Working with models">
 
 
-        public function unsetModel()
-        {
-            array_pop($this->models);
-        }
-
-        public function model($model, array $options = [])
-        {
-            $this->models[] = $model;
-            return $this->getDelegate()->model(last($this->models), $options);
-        }
-
-        /**
-         * @return mixed|Model
-         */
-        public function currentModel()
-        {
-            return last($this->models);
-        }
-
-        /**
-         * @return Model[]|\mixed[]
-         */
-        public function getModels()
-        {
-            return $this->models;
-        }
-
-        /**
-         * @param $model
-         */
-        public function setModel($model)
-        {
-            $this->models[] = $model;
-        }
-
-        //</editor-fold>
-
-        //<editor-fold desc="Working with MetaData">
-        /**
-         * @param $field
-         * @param string $after
-         * @param string $before
-         * @return \phpQuery|\QueryTemplatesParse|\QueryTemplatesSource|\QueryTemplatesSourceQuery|string
-         */
-        public function meta($field, $after = null, $before = null)
-        {
-            $element = 'label';
-
-            if ($this->metaManager->currentMetaExists()) {
-                $element = $this->metaManager->getCurrentElement();
-                $field = $this->metaManager->getCurrentMetaValue($field);
-            }
-
-            return $this->createElement($element)->html(trim(implode(' ', [$before, $field, $after])));
-        }
-
-        public function setMeta(MetaData $meta, $metaType = 'label')
-        {
-            $this->metaManager->addMeta($meta, $metaType);
-        }
-
-        public function unsetMeta()
-        {
-            $this->metaManager->unsetCurrentMeta();
-        }
-
-        public function getMeta()
-        {
-            return $this->metaManager->getCurrentMeta();
-        }
-
-        public function assignMeta(&$meta = null)
-        {
-            $meta = $this->metaManager->currentMetaExists() ? $this->metaManager->getCurrentMeta() : null;
-        }
-        //</editor-fold>
-
-        public function getDelegate()
-        {
-            return $this->laraForm;
+    public function unsetModel()
+    {
+        if (!$this->modelStack->isEmpty()) {
+            $this->modelStack->pop();
         }
     }
+
+    public function model($model, array $options = [])
+    {
+        $this->setModel($model);
+        return $this->getDelegate()->model($this->getModel(), $options);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModel()
+    {
+        return $this->modelStack->isEmpty() ? null : $this->modelStack->top();
+    }
+
+    /**
+     * @param $model
+     */
+    public function setModel($model)
+    {
+        $this->modelStack->push($model);
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Working with MetaAttributes">
+    /**
+     * @param $field
+     * @param string $after
+     * @param string $before
+     * @return \phpQuery|string
+     */
+    public function meta($field, $after = null, $before = null)
+    {
+        if ($this->metaStack->isEmpty()) {
+            throw new \LogicException("No meta available to extract '{$field}'' value.");
+        }
+
+        $element = pq($this->getMeta()->element($field));
+
+        if ($after !== null) {
+            $element->append($after);
+        }
+
+        if ($before !== null) {
+            $element->prepend($before);
+        }
+
+        return $element;
+    }
+
+    public function setMeta(MetaAttributes $meta)
+    {
+        $this->metaStack->push($meta);
+    }
+
+    public function unsetMeta()
+    {
+        if (!$this->metaStack->isEmpty()) {
+            $this->metaStack->pop();
+        }
+    }
+
+    /**
+     * @return MetaAttributes
+     */
+    public function getMeta()
+    {
+        return $this->metaStack->isEmpty() ? null : $this->metaStack->top();
+    }
+
+    /**
+     * @param null $meta
+     */
+    public function assignMeta(&$meta = null)
+    {
+        $meta = $this->getMeta();
+    }
+    //</editor-fold>
+
+    public function getDelegate()
+    {
+        if ($this->laraForm === null) {
+            return $this->laraForm = $this->getApplication()->make('form');
+        }
+
+        return $this->laraForm;
+    }
+}

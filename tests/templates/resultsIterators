@@ -1,0 +1,38 @@
+<?php foreach($items as $item): ?>
+    <?php echo e($key); ?>
+
+<?php endforeach; ?>
+
+<?php foreach($items as &$item): ?>
+    <?php echo e($key); ?>
+
+<?php endforeach; ?>
+
+<?php foreach($items as $key => $item): ?>
+    <?php echo e($key); ?>
+
+<?php endforeach; ?>
+
+<?php {{countVar}} = count($items); for({{$key}} = 0; {{$key}} < {{countVar}}; {{$key}}++): ?>
+<?php $item = $items[{{$key}}] ?>
+    <?php echo e($key); ?>
+
+<?php endfor; ?>
+
+<?php {{countVar}} = count($items); for($key = 0; $key < {{countVar}}; $key++): ?>
+<?php $item = $items[$key] ?>
+    <?php echo e($key); ?>
+
+<?php endfor; ?>
+
+<?php {{countVar}} = count($items) - 1; for({{$key}} = {{countVar}}; {{$key}} > 0; {{$key}}--): ?>
+<?php $item = $items[{{$key}}] ?>
+    <?php echo e($key); ?>
+
+<?php endfor; ?>
+
+<?php {{countVar}} = count($items) - 1; for($key = {{countVar}}; $key > 0; $key--): ?>
+<?php $item = $items[$key] ?>
+    <?php echo e($key); ?>
+
+<?php endfor; ?>

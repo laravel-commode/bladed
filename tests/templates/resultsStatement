@@ -1,0 +1,7 @@
+<?php echo bladed('command', $__env)->propertyToTest ?>
+
+propertyToTestValue
+
+<?php echo bladed('command', $__env)->methodToTest($a, '6', 458, []) ?>
+
+propertyToTestValue

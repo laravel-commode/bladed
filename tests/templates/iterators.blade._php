@@ -1,0 +1,27 @@
+@each($items, $item)
+    {{$key}}
+@each @>
+
+@each($items, &$item)
+    {{$key}}
+@each @>
+
+@each($items, $item, $key)
+    {{$key}}
+@each @>
+
+@up($items, $item)
+    {{$key}}
+@up @>
+
+@up($items, $item, $key)
+    {{$key}}
+@up @>
+
+@down($items, $item)
+    {{$key}}
+@down @>
+
+@down($items, $item, $key)
+    {{$key}}
+@down @>

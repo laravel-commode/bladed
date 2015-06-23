@@ -1,0 +1,9 @@
+@?command.methodToTest() @>
+    {{$var}}
+@?->
+    @command.propertyToTest @>
+@?>
+
+@?!command.propertyToTest @>
+    {{$var}}
+@?>

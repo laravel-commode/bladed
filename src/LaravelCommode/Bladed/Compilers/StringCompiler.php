@@ -1,33 +1,34 @@
-<?php namespace LaravelCommode\Bladed\Compilers;
-        
-    use Illuminate\View\Compilers\BladeCompiler;
+<?php
+namespace LaravelCommode\Bladed\Compilers;
 
-    class StringCompiler extends BladeCompiler
+use Illuminate\View\Compilers\BladeCompiler;
+
+class StringCompiler extends BladeCompiler
+{
+
+    /**
+     * Compile blade template with passing arguments.
+     *
+     * @param $value
+     * @param  array $args
+     * @throws \Exception
+     * @return string
+     */
+    public function compileWiths($value, array $args = array())
     {
+        $generated = parent::compileString($value);
 
-        /**
-         * Compile blade template with passing arguments.
-         *
-         * @param $value
-         * @param  array $args
-         * @throws \Exception
-         * @return string
-         */
-        public function compileWiths($value, array $args = array())
-        {
-            $generated = parent::compileString($value);
+        ob_start() and extract($args, EXTR_SKIP);
 
-            ob_start() and extract($args, EXTR_SKIP);
-
-            try {
-                eval('?>'.$generated);
-            } catch (\Exception $e) {
-                ob_get_clean();
-                throw $e;
-            }
-
-            $content = ob_get_clean();
-
-            return $content;
+        try {
+            eval('?>'.$generated);
+        } catch (\Exception $e) {
+            ob_get_clean();
+            throw $e;
         }
+
+        $content = ob_get_clean();
+
+        return $content;
     }
+}

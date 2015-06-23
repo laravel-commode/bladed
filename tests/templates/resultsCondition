@@ -1,0 +1,11 @@
+<?php if (bladed('command', $__env)->methodToTest()): ?>
+    <?php echo e($var); ?>
+
+<?php else: ?>
+    <?php echo bladed('command', $__env)->propertyToTest ?>
+<?php endif; ?>
+
+<?php if (!bladed('command', $__env)->propertyToTest): ?>
+    <?php echo e($var); ?>
+
+<?php endif; ?>
