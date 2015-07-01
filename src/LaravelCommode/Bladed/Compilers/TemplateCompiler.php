@@ -38,12 +38,12 @@ class TemplateCompiler
      */
     public static function composeTemplate($template)
     {
-        return strtr($template, [
+        return addslashes(strtr($template, [
             '$'     => '(:var)',
             '<?php' => '(:<php)',
             '<?='   => '(:<ephp)',
             '?>'    => '(:php>)'
-        ]);
+        ]));
     }
 
     /**
@@ -52,7 +52,7 @@ class TemplateCompiler
      */
     public static function compileTemplate($template)
     {
-        return strtr($template, [
+        return strtr(stripslashes($template), [
             '(:var)'    => '$',
             '(:<php)'   => '<?php',
             '(:<ephp)'  => '<?=',
