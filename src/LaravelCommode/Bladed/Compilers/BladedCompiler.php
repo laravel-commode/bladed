@@ -166,8 +166,8 @@ class BladedCompiler
         $evalScope = $this->getScope();
 
         return function ($matches) use ($evalScope) {
-            $matches['body'] = addslashes(
-                $this->composeTemplate(substr($matches['body'], 1, mb_strlen($matches['body']) - 2))
+            $matches['body'] = $this->composeTemplate(
+                substr($matches['body'], 1, mb_strlen($matches['body']) - 2)
             );
 
             $matches['parameters'] = substr($matches['parameters'], 1, mb_strlen($matches['parameters']) - 2);
